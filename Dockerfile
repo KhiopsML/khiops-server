@@ -1,11 +1,7 @@
 # Build stage
-FROM dockerproxy.repos.tech.orange/golang:1.17.3 as build
+FROM golang:1.17.3 as build
 
-LABEL Maintainer="stephane.gouache@orange.com"                    \
-      Name="docker-khiops"                                        \
-      Version="0.1.1"                                             \
-      Description="Server for controlling Khiops"                 \
-      Url="https://gitlab.tech.orange/khiops/server"
+LABEL maintainer="Khiops Team <khiops.team@orange.com>"
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y upx-ucl && \
@@ -26,7 +22,7 @@ RUN useradd -rm -d /home/ubuntu -s /bin/bash ubuntu
 USER ubuntu
 
 # Runtime stage
-FROM dockerproxy.repos.tech.orange/busybox:glibc as runtime
+FROM busybox:glibc as runtime
 COPY --from=build /service /service
 
 ENTRYPOINT ["/service"]
